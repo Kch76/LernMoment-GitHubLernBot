@@ -1,0 +1,14 @@
+# Informationen zu EDITORCONFIG-Dateien finden Sie unter https://aka.ms/editorconfigdocs
+
+# do not use setings from other editorconfig files in an upper folder
+root = true
+
+# All files
+[*]
+indent_style = space
+# Not sure whether only specific files should be formatted this way.
+charset = utf-8
+
+# Xml files
+[*.xml]
+indent_size = 2
