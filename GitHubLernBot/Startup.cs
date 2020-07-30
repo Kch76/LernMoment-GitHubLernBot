@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GitHubLernBot.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,9 @@ namespace GitHubLernBot
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Inject GitHub configuration wich should be read from user secrets
+            services.Configure<GitHubOptions>(Configuration.GetSection(GitHubOptions.GitHub));
+
             services.AddControllers();
         }
 
