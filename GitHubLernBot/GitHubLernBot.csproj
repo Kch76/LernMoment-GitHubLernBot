@@ -5,5 +5,13 @@
     <UserSecretsId>f235c3e5-c2de-4abf-ad86-948d1a3bb994</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\octokit.net.bot\octokit.net.bot.csproj" />
+  </ItemGroup>
+
 
 </Project>

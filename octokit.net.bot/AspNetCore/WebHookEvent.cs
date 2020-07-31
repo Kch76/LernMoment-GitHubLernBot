@@ -11,9 +11,9 @@ namespace Octokit.Bot
     {
         private JObject _payload = null;
         private string _payloadRaw = null;
-        private GitHubOption _gitHubOption;
+        private GitHubOptions _gitHubOption;
 
-        internal WebHookEvent(GitHubOption gitHubOption)
+        internal WebHookEvent(GitHubOptions gitHubOption)
         {
             _gitHubOption = gitHubOption;
         }

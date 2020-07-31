@@ -8,9 +8,9 @@ namespace Octokit.Bot
 {
     public class WebhookEventBinder : IModelBinder
     {
-        private IOptions<GitHubOption> _gitHubOptions;
+        private IOptions<GitHubOptions> _gitHubOptions;
 
-        public WebhookEventBinder(IOptions<GitHubOption> gitHubOptions)
+        public WebhookEventBinder(IOptions<GitHubOptions> gitHubOptions)
         {
             _gitHubOptions = gitHubOptions;
         }

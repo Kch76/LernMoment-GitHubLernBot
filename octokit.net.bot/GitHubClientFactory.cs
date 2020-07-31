@@ -1,4 +1,4 @@
-﻿using JWT;
+using JWT;
 using JWT.Algorithms;
 using JWT.Serializers;
 using Octokit.Extensions;
@@ -17,7 +17,7 @@ namespace Octokit.Bot
 {
     public static class GitHubClientFactory
     {
-        public static  GitHubClient CreateGitHubAppClient(GitHubOption option)
+        public static  GitHubClient CreateGitHubAppClient(GitHubOptions option)
         {
             return GetAppClient(option, option.AppName);
 
@@ -28,7 +28,7 @@ namespace Octokit.Bot
             return await GetInstallationContext(appClient, installationId, appName);
         }
 
-        public static async Task<InstallationContext> CreateGitHubInstallationClient(GitHubOption option,long installationId)
+        public static async Task<InstallationContext> CreateGitHubInstallationClient(GitHubOptions option,long installationId)
         {
             return await CreateGitHubInstallationClient(CreateGitHubAppClient(option), installationId, option.AppName);
         }
@@ -43,14 +43,14 @@ namespace Octokit.Bot
             return new InstallationContext(installationClient,accessToken);
         }
 
-        private static GitHubClient GetAppClient(GitHubOption option, string appName)
+        private static GitHubClient GetAppClient(GitHubOptions option, string appName)
         {
             // Use GitHubJwt library to create the GitHubApp Jwt Token using our private certificate PEM file
             var generator = new GitHubJwt.GitHubJwtFactory(
-                new GitHubJwt.FilePrivateKeySource(option.PrivateKeyFileName),
+                new GitHubJwt.StringPrivateKeySource(option.PrivateKey),
                 new GitHubJwt.GitHubJwtFactoryOptions
                 {
-                    AppIntegrationId = option.AppIdentifier, // The GitHub App Id
+                    AppIntegrationId = option.AppId, // The GitHub App Id
                     ExpirationSeconds = 600 // 10 minutes is the maximum time allowed
                 }
             );

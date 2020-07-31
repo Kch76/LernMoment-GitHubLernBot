@@ -12,14 +12,14 @@ namespace Octokit.Bot
         public delegate Task HandleWebHook(EventContext eventContext);
 
         private readonly IServiceProvider _serviceProvider;
-        private readonly GitHubOption _gitHubOption;
+        private readonly GitHubOptions _gitHubOption;
         private readonly HttpContext _httpContext;
         private readonly Dictionary<string, List<HandleWebHook>> _registry = new Dictionary<string, List<HandleWebHook>>();
 
         public WebHookHandlerRegistry(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _gitHubOption = serviceProvider.GetService<IOptions<GitHubOption>>().Value;
+            _gitHubOption = serviceProvider.GetService<IOptions<GitHubOptions>>().Value;
             _httpContext = serviceProvider.GetService<IHttpContextAccessor>().HttpContext;
         }
 
