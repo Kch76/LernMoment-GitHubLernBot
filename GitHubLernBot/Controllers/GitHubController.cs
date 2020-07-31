@@ -13,11 +13,19 @@ namespace GitHubLernBot.Controllers
     [ApiController]
     public class GitHubController : ControllerBase
     {
-        private readonly GitHubOptions _options;
+        private readonly WebHookHandlerRegistry _registry;
 
-        public GitHubController(IOptions<GitHubOptions> options)
+        public GitHubController(WebHookHandlerRegistry registry)
         {
-            _options = options.Value;
+            _registry = registry;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> HandleGitHubHooks(WebHookEvent webhookEvent)
+        {
+            await _registry.Handle(webhookEvent);
+
+            return Ok();
         }
     }
 }
