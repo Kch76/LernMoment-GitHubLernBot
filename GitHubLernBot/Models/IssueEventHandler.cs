@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace GitHubLernBot.Models
@@ -43,16 +44,20 @@ namespace GitHubLernBot.Models
                         State = ItemStateFilter.All,
                         Filter = IssueFilter.All
                     };
+
                     var issues = await client.Issue.GetAllForRepository(ownerName, respositoryName, allIssuesForUser);
                     var issueCountForCreator = issues.Where(i => i.PullRequest == null).Count();
                     if (issueCountForCreator == 1)
                     {
+                        var welcomeFileResponse = await client.Repository.Content.GetRawContent(ownerName, repository, ".github/welcome-first-issue.md");
+                        var welcomeFileContent = Encoding.Default.GetString(welcomeFileResponse);
+
                         var issueNumber = (int)payload.issue.number;
                         var repositoryId = (long)payload.repository.id;
-                        _ = await eventContext.InstallationContext
-                                                .Client
-                                                .Issue.Comment
-                                                .Create(repositoryId, issueNumber, "Willkommen bei LernMoment und auf GitHub!");
+                        _ = await client
+                                    .Issue.Comment
+                                    .Create(repositoryId, issueNumber, welcomeFileContent);
+
                         Debug.WriteLine("Habe einen Willkommens-Kommentar gepostet!");
                     }
                     else
