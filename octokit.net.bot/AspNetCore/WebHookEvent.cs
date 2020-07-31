@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Security.Cryptography;
@@ -11,7 +11,7 @@ namespace Octokit.Bot
     {
         private JObject _payload = null;
         private string _payloadRaw = null;
-        private GitHubOptions _gitHubOption;
+        private readonly GitHubOptions _gitHubOption;
 
         internal WebHookEvent(GitHubOptions gitHubOption)
         {
@@ -54,8 +54,7 @@ namespace Octokit.Bot
 
         public long? GetInstallationId()
         {
-            JToken installation;
-            _payload.TryGetValue("installation", out installation);
+            _payload.TryGetValue("installation", out JToken installation);
 
             if (installation != null)
             {

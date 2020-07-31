@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
@@ -8,7 +8,7 @@ namespace Octokit.Bot
 {
     public class WebhookEventBinder : IModelBinder
     {
-        private IOptions<GitHubOptions> _gitHubOptions;
+        private readonly IOptions<GitHubOptions> _gitHubOptions;
 
         public WebhookEventBinder(IOptions<GitHubOptions> gitHubOptions)
         {

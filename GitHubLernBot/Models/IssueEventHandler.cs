@@ -31,10 +31,11 @@ namespace GitHubLernBot.Models
                 try
                 {
                     var client = eventContext.InstallationContext.Client;
+                    var payload = eventContext.WebHookEvent.GetPayload();
 
-                    var creatorName = (string)eventContext.WebHookEvent.GetPayload().issue.user.login;
-                    var respositoryName = (string)eventContext.WebHookEvent.GetPayload().repository.name;
-                    var ownerName = (string)eventContext.WebHookEvent.GetPayload().repository.owner.login;
+                    var creatorName = (string)payload.issue.user.login;
+                    var respositoryName = (string)payload.repository.name;
+                    var ownerName = (string)payload.repository.owner.login;
 
                     var allIssuesForUser = new RepositoryIssueRequest
                     {
@@ -46,12 +47,12 @@ namespace GitHubLernBot.Models
                     var issueCountForCreator = issues.Where(i => i.PullRequest == null).Count();
                     if (issueCountForCreator == 1)
                     {
-                        var issueNumber = (int)eventContext.WebHookEvent.GetPayload().issue.number;
-                        var repositoryId = (long)eventContext.WebHookEvent.GetPayload().repository.id;
-                        var commentResponse = await eventContext.InstallationContext
-                                               .Client
-                                               .Issue.Comment
-                                               .Create(repositoryId, issueNumber, "Willkommen bei LernMoment und auf GitHub!");
+                        var issueNumber = (int)payload.issue.number;
+                        var repositoryId = (long)payload.repository.id;
+                        _ = await eventContext.InstallationContext
+                                                .Client
+                                                .Issue.Comment
+                                                .Create(repositoryId, issueNumber, "Willkommen bei LernMoment und auf GitHub!");
                         Debug.WriteLine("Habe einen Willkommens-Kommentar gepostet!");
                     }
                     else
