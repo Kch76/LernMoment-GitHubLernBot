@@ -1,3 +1,4 @@
+using Octokit;
 using Octokit.Bot;
 using System;
 using System.Collections.Generic;
@@ -29,14 +30,35 @@ namespace GitHubLernBot.Models
             {
                 try
                 {
-                    var issueNumber = (int)eventContext.WebHookEvent.GetPayload().issue.number;
-                    var repositoryId = (long)eventContext.WebHookEvent.GetPayload().repository.id;
-                    var commentResponse = await eventContext.InstallationContext
-                                           .Client
-                                           .Issue.Comment
-                                           .Create(repositoryId, issueNumber, "Willkommen bei LernMoment und auf GitHub!");
+                    var client = eventContext.InstallationContext.Client;
 
-                    Debug.WriteLine($"Habe folgenden Kommentar gepostet: {commentResponse}");
+                    var creatorName = (string)eventContext.WebHookEvent.GetPayload().issue.user.login;
+                    var respositoryName = (string)eventContext.WebHookEvent.GetPayload().repository.name;
+                    var ownerName = (string)eventContext.WebHookEvent.GetPayload().repository.owner.login;
+
+                    var allIssuesForUser = new RepositoryIssueRequest
+                    {
+                        Creator = creatorName,
+                        State = ItemStateFilter.All,
+                        Filter = IssueFilter.All
+                    };
+                    var issues = await client.Issue.GetAllForRepository(ownerName, respositoryName, allIssuesForUser);
+                    var issueCountForCreator = issues.Where(i => i.PullRequest == null).Count();
+                    if (issueCountForCreator == 1)
+                    {
+                        var issueNumber = (int)eventContext.WebHookEvent.GetPayload().issue.number;
+                        var repositoryId = (long)eventContext.WebHookEvent.GetPayload().repository.id;
+                        var commentResponse = await eventContext.InstallationContext
+                                               .Client
+                                               .Issue.Comment
+                                               .Create(repositoryId, issueNumber, "Willkommen bei LernMoment und auf GitHub!");
+                        Debug.WriteLine("Habe einen Willkommens-Kommentar gepostet!");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Der Ersteller ist kein First-Time-Contributor!");
+                    }
+
                 }
                 catch (Exception ex)
                 {
